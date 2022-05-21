@@ -16,7 +16,7 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
     if (!actor) return result;
     result.actorId = actor.id;
 
-    let attributes = this._getAttributes(actor, tokenId);
+    let attributes = this._getAttributeList(actor, tokenId);
 /*     let archetypes = this._getArchetypes(actor, tokenId);
     let inventory = this._getInventory(actor, tokenId);
     let baseSkills = this._getBaseSkills(actor, tokenId);
@@ -24,7 +24,7 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
 
     this._combineCategoryWithList(
       result,
-      "attributs",
+      this.i18n("tokenactionhud.attributes"),
       attributes
     );
    /*  this._combineCategoryWithList(
@@ -55,8 +55,10 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
     return result;
   }
 
-  _getAttributes(actor, tokenId) {
-    let result = this.initializeEmptyCategory("attributs");
+  _getAttributeList(actor, tokenId) {
+    let categoryId = "attributes";
+    let macroType = "attribute";
+    let result = this.initializeEmptyCategory(categoryId);
 
     for (let attribute in actor.data.data.attributes) {
       console.log('Attribute in token hud')
@@ -69,6 +71,8 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
      
      this._combineSubcategoryWithCategory(result, attribute, attributeCategory);
     }
+
+    console.log("Attribute category is => ", attributeCategory)
   }
 
   _getArchetypes(actor, tokenId) {
