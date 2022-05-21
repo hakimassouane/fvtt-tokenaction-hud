@@ -25,6 +25,7 @@ import { DnD4eSystemManager } from './dnd4e.js'
 import { ED4eSystemManager } from './ed4e.js'
 import { GURPSSystemManager } from './gurps.js'
 import { Space1889SystemManager } from './space1889.js'
+import { LVDDQueteRapideSystemManager } from './lvdd-quete-rapide.js'
 
 export class SystemManagerFactory {
   static create(system, appName) {
@@ -87,6 +88,8 @@ export class SystemManagerFactory {
         return new GURPSSystemManager(appName);
       case 'space1889':
         return new Space1889SystemManager(appName);
+      case 'lvdd-quete-rapide':
+        return new LVDDQueteRapideSystemManager(appName);
     }
   }
 }
