@@ -70,9 +70,10 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
       });
      
      this._combineSubcategoryWithCategory(result, attribute, attributeCategory);
+     console.log("Attribute category is => ", attributeCategory)
     }
 
-    console.log("Attribute category is => ", attributeCategory)
+    
   }
 
   _getArchetypes(actor, tokenId) {
