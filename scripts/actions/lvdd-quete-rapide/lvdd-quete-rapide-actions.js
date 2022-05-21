@@ -8,6 +8,7 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
 
   async doBuildActionList(token, multipleTokens) {
     let result = this.initializeEmptyActionList();
+    console.log('Initialize dobuildactionlist tokenHUD')
     if (!token) return result;
     let tokenId = token.id;
     result.tokenId = tokenId;
@@ -23,7 +24,7 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
 
     this._combineCategoryWithList(
       result,
-      "Attributs",
+      "attributs",
       attributes
     );
    /*  this._combineCategoryWithList(
@@ -58,6 +59,7 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
     let result = this.initializeEmptyCategory("attributs");
 
     for (let attribute in actor.data.data.attributes) {
+      console.log('Attribute in token hud')
       let attributeCategory = this.initializeEmptySubcategory();
       
       attributeCategory.actions.push({
