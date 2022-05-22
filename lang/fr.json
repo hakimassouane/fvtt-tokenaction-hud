@@ -499,6 +499,8 @@
       "capacities": "Capacités"
     },
     "lvddQueteRapide": {
+      "baseSkills": "Compétences de base",
+      "specificSkills": "Compétences particulières",
       "attributes": {
         "categoryName": "Attributs",
         "str": "Force",

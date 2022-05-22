@@ -564,6 +564,8 @@
       "retreatblock": "Retreating Block"
     },
     "lvddQueteRapide": {
+      "baseSkills": "Base skills",
+      "specificSkills": "Specific skills",
       "attributes": {
         "categoryName": "Attributes",
         "str": "Strength",

@@ -4,6 +4,50 @@ import * as settings from "../../settings.js";
 export class ActionHandlerLvddQueteRapide extends ActionHandler {
   constructor(filterManager, categoryManager) {
     super(filterManager, categoryManager);
+    this.baseSkillsFr = [
+      "Acrobaties",
+      "Athlétisme",
+      "Attaque au corps à corps",
+      "Attaque à distance",
+      "Calme",
+      "Course",
+      "Discrétion",
+      "Dressage",
+      "Esquive",
+      "Intimidation",
+      "Investigation",
+      "Mensonge",
+      "Médecine",
+      "Perception",
+      "Performance",
+      "Perspicacité",
+      "Persuasion",
+      "Resistance",
+      "Séduction",
+      "Voler"
+    ]
+    this.baseSkillsEn = [
+      "Acrobatics",
+      "Animal handling",
+      "Athletics",
+      "Calm",
+      "Dodge",
+      "Endurance",
+      "Insight",
+      "Intimidation",
+      "Investigation",
+      "Lying",
+      "Medicine",
+      "Melee attack",
+      "Perception",
+      "Performance",
+      "Persuasion",
+      "Ranged attack",
+      "Running",
+      "Seduction",
+      "Stealing",
+      "Stealth"
+    ]
   }
 
   async doBuildActionList(token, multipleTokens) {
@@ -19,8 +63,8 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
     let attributes = this._getAttributeList(actor, tokenId);
     let archetypes = this._getArchetypeList(actor, tokenId);
     let inventory = this._getInventory(actor, tokenId);
-    /*let baseSkills = this._getBaseSkills(actor, tokenId);
-    let customSkills = this._getCustomSkills(actor, tokenId); */
+    let baseSkills = this._getBaseSkills(actor, tokenId);
+    let specificSkills = this._getSpecificSkills(actor, tokenId);
 
     console.log("attributes in do build action list is => ", attributes)
 
@@ -39,16 +83,16 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
       this.i18n("tokenactionhud.inventory"),
       inventory
     );
-    /*this._combineCategoryWithList(
+    this._combineCategoryWithList(
       result,
-      "Compétences de base",
+      this.i18n("tokenactionhud.lvddQueteRapide.baseSkills"),
       baseSkills
     );
     this._combineCategoryWithList(
       result,
-      "Compétences particulières",
-      customSkills
-    ); */
+      this.i18n("tokenactionhud.lvddQueteRapide.specificSkills"),
+      specificSkills
+    );
 
     this._setFilterSuggestions(actor);
 
@@ -100,7 +144,7 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
     let inventorySubCategory = this.initializeEmptySubcategory();
 
     actor.data.data.resources.items.forEach(item => {
-      if (item.data.data.canBeRolled) {
+      if (item.data.data.canBeRolled && item.data.data.rollStats.length > 0) {
         inventorySubCategory.actions.push({
           name: item.name,
           img: item.img,
@@ -115,209 +159,45 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
   }
 
   _getBaseSkills(actor, tokenId) {
-    let categoryId = "skills";
-    let macroType = "skill";
+    let categoryId = "baseSkills";
+    let type = "baseSkill";
+    let baseSkillCategory = this.initializeEmptyCategory(categoryId);
+    let baseSkillSubCategory = this.initializeEmptySubcategory();
 
-    let result = this.initializeEmptyCategory(categoryId);
-    let skills = actor.getItemTypes("skill").filter((i) => i.id);
+    actor.data.data.skills.items.forEach(skill => {
+      if (this.baseSkillsFr.includes(skill.name) || this.baseSkillsEn.includes(skill.name)) {
+        baseSkillSubCategory.actions.push({
+          name: skill.name,
+          img: skill.img,
+          encodedValue: [type, tokenId, skill.name].join(this.delimiter),
+        });
+      }
+    })
 
-    result.choices = skills.length;
+    this._combineSubcategoryWithCategory(baseSkillCategory, this.i18n("tokenactionhud.lvddQueteRapide.baseSkills"), baseSkillSubCategory);
 
-    let transMelee = game.i18n.localize("tokenactionhud.wfrp.meleeSkillPrefix");
-    let transRanged = game.i18n.localize(
-      "tokenactionhud.wfrp.rangedSkillPrefix"
-    );
-
-    let meleeSkills = skills.filter((s) => s.data.name.startsWith(transMelee));
-    let meleeId = `${categoryId}_melee`;
-    this._setFilterSuggestions(meleeId, meleeSkills);
-    let meleeCat = this.initializeEmptySubcategory(meleeId);
-    meleeCat.canFilter = meleeSkills.length > 0 ? true : false;
-    let filteredMeleeSkills = this._filterElements(meleeId, meleeSkills);
-    meleeCat.actions = this._produceMap(
-      tokenId,
-      filteredMeleeSkills,
-      macroType
-    );
-
-    let rangedSkills = skills.filter((s) =>
-      s.data.name.startsWith(transRanged)
-    );
-    let rangedId = `${categoryId}_ranged`;
-    this._setFilterSuggestions(rangedId, rangedSkills);
-    let rangedCat = this.initializeEmptySubcategory(rangedId);
-    rangedCat.canFilter = rangedSkills.length > 0 ? true : false;
-    let filteredRangedSkills = this._filterElements(rangedId, rangedSkills);
-    rangedCat.actions = this._produceMap(
-      tokenId,
-      filteredRangedSkills,
-      macroType
-    );
-
-    let basicSkills = skills.filter(
-      (s) =>
-        !(
-          s.data.name.startsWith(transMelee) ||
-          s.data.name.startsWith(transRanged)
-        ) && s.data.data.advanced.value !== "adv"
-    );
-    let basicId = `${categoryId}_basic`;
-    this._setFilterSuggestions(basicId, basicSkills);
-    let basicSkillsCat = this.initializeEmptySubcategory(basicId);
-    let filteredBasicSkills = this._filterElements(basicId, basicSkills);
-    basicSkillsCat.canFilter = basicSkills.length > 0 ? true : false;
-    basicSkillsCat.actions = this._produceMap(
-      tokenId,
-      filteredBasicSkills,
-      macroType
-    );
-
-    let advancedSkills = skills.filter(
-      (s) =>
-        !(
-          s.data.name.startsWith(transMelee) ||
-          s.data.name.startsWith(transRanged)
-        ) && s.data.data.advanced.value === "adv"
-    );
-    let advancedId = `${categoryId}_advanced`;
-    this._setFilterSuggestions(advancedId, advancedSkills);
-    let advancedSkillsCat = this.initializeEmptySubcategory(advancedId);
-    advancedSkillsCat.canFilter = advancedSkills.length > 0 ? true : false;
-    let filteredAdvancedSkills = this._filterElements(
-      advancedId,
-      advancedSkills
-    );
-    advancedSkillsCat.actions = this._produceMap(
-      tokenId,
-      filteredAdvancedSkills,
-      macroType
-    );
-
-    this._combineSubcategoryWithCategory(
-      result,
-      this.i18n("tokenactionhud.melee"),
-      meleeCat
-    );
-    this._combineSubcategoryWithCategory(
-      result,
-      this.i18n("tokenactionhud.ranged"),
-      rangedCat
-    );
-    this._combineSubcategoryWithCategory(
-      result,
-      this.i18n("tokenactionhud.basic"),
-      basicSkillsCat
-    );
-    this._combineSubcategoryWithCategory(
-      result,
-      this.i18n("tokenactionhud.advanced"),
-      advancedSkillsCat
-    );
-
-    return result;
+    return baseSkillCategory
   }
 
-  _getBaseSkills(actor, tokenId) {
-    let categoryId = "skills";
-    let macroType = "skill";
+  _getSpecificSkills(actor, tokenId) {
+    let categoryId = "specificSkills";
+    let type = "specificSkill";
+    let specificSkillCategory = this.initializeEmptyCategory(categoryId);
+    let specificSkillSubCategory = this.initializeEmptySubcategory();
 
-    let result = this.initializeEmptyCategory(categoryId);
-    let skills = actor.getItemTypes("skill").filter((i) => i.id);
+    actor.data.data.skills.items.forEach(skill => {
+      if (!this.baseSkillsFr.includes(skill.name) && !this.baseSkillsEn.includes(skill.name)) {
+        specificSkillSubCategory.actions.push({
+          name: skill.name,
+          img: skill.img,
+          encodedValue: [type, tokenId, skill.name].join(this.delimiter),
+        });
+      }
+    })
 
-    result.choices = skills.length;
+    this._combineSubcategoryWithCategory(specificSkillCategory, this.i18n("tokenactionhud.lvddQueteRapide.specificSkills"), specificSkillSubCategory);
 
-    let transMelee = game.i18n.localize("tokenactionhud.wfrp.meleeSkillPrefix");
-    let transRanged = game.i18n.localize(
-      "tokenactionhud.wfrp.rangedSkillPrefix"
-    );
-
-    let meleeSkills = skills.filter((s) => s.data.name.startsWith(transMelee));
-    let meleeId = `${categoryId}_melee`;
-    this._setFilterSuggestions(meleeId, meleeSkills);
-    let meleeCat = this.initializeEmptySubcategory(meleeId);
-    meleeCat.canFilter = meleeSkills.length > 0 ? true : false;
-    let filteredMeleeSkills = this._filterElements(meleeId, meleeSkills);
-    meleeCat.actions = this._produceMap(
-      tokenId,
-      filteredMeleeSkills,
-      macroType
-    );
-
-    let rangedSkills = skills.filter((s) =>
-      s.data.name.startsWith(transRanged)
-    );
-    let rangedId = `${categoryId}_ranged`;
-    this._setFilterSuggestions(rangedId, rangedSkills);
-    let rangedCat = this.initializeEmptySubcategory(rangedId);
-    rangedCat.canFilter = rangedSkills.length > 0 ? true : false;
-    let filteredRangedSkills = this._filterElements(rangedId, rangedSkills);
-    rangedCat.actions = this._produceMap(
-      tokenId,
-      filteredRangedSkills,
-      macroType
-    );
-
-    let basicSkills = skills.filter(
-      (s) =>
-        !(
-          s.data.name.startsWith(transMelee) ||
-          s.data.name.startsWith(transRanged)
-        ) && s.data.data.advanced.value !== "adv"
-    );
-    let basicId = `${categoryId}_basic`;
-    this._setFilterSuggestions(basicId, basicSkills);
-    let basicSkillsCat = this.initializeEmptySubcategory(basicId);
-    let filteredBasicSkills = this._filterElements(basicId, basicSkills);
-    basicSkillsCat.canFilter = basicSkills.length > 0 ? true : false;
-    basicSkillsCat.actions = this._produceMap(
-      tokenId,
-      filteredBasicSkills,
-      macroType
-    );
-
-    let advancedSkills = skills.filter(
-      (s) =>
-        !(
-          s.data.name.startsWith(transMelee) ||
-          s.data.name.startsWith(transRanged)
-        ) && s.data.data.advanced.value === "adv"
-    );
-    let advancedId = `${categoryId}_advanced`;
-    this._setFilterSuggestions(advancedId, advancedSkills);
-    let advancedSkillsCat = this.initializeEmptySubcategory(advancedId);
-    advancedSkillsCat.canFilter = advancedSkills.length > 0 ? true : false;
-    let filteredAdvancedSkills = this._filterElements(
-      advancedId,
-      advancedSkills
-    );
-    advancedSkillsCat.actions = this._produceMap(
-      tokenId,
-      filteredAdvancedSkills,
-      macroType
-    );
-
-    this._combineSubcategoryWithCategory(
-      result,
-      this.i18n("tokenactionhud.melee"),
-      meleeCat
-    );
-    this._combineSubcategoryWithCategory(
-      result,
-      this.i18n("tokenactionhud.ranged"),
-      rangedCat
-    );
-    this._combineSubcategoryWithCategory(
-      result,
-      this.i18n("tokenactionhud.basic"),
-      basicSkillsCat
-    );
-    this._combineSubcategoryWithCategory(
-      result,
-      this.i18n("tokenactionhud.advanced"),
-      advancedSkillsCat
-    );
-
-    return result;
+    return specificSkillCategory
   }
 
   /** @override */
@@ -329,43 +209,4 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
       this.filterManager.setSuggestions(id, suggestions);
   }
 
-  _filterElements(categoryId, skills) {
-    let filteredNames = this.filterManager.getFilteredNames(categoryId);
-    let result = skills.filter((s) => !!s);
-    if (filteredNames.length > 0) {
-      if (this.filterManager.isBlocklist(categoryId)) {
-        result = skills.filter((s) => !filteredNames.includes(s.name));
-      } else {
-        result = skills.filter((s) => filteredNames.includes(s.name));
-      }
-    }
-
-    return result;
-  }
-
-
-  _produceMap(tokenId, itemSet, type) {
-    return itemSet.map((i) => {
-      let encodedValue = [type, tokenId, i.id].join(this.delimiter);
-      let img = this._getImage(i);
-      return { name: i.name, encodedValue: encodedValue, id: i.id, img: img };
-    })
-    .sort((a, b) => {
-      return a.name
-        .toUpperCase()
-        .localeCompare(b.name.toUpperCase(), undefined, {
-          sensitivity: "base",
-        });
-    });
-  }
-
-  _getImage(item) {
-    let result = "";
-    if (settings.get("showIcons")) result = item.img ?? "";
-
-    return result?.includes("icons/svg/mystery-man.svg") ||
-      result?.includes("systems/wfrp4e/icons/blank.png")
-      ? ""
-      : result;
-  }
 }
