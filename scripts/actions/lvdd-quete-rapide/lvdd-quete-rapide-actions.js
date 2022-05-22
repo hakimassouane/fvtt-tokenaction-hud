@@ -90,7 +90,7 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
 
     this._combineSubcategoryWithCategory(archetypeCategory, "Archétypes", archetypeSubCategory);
 
-    return attributeCategory
+    return archetypeCategory
   }
 
   _getInventory(actor, tokenId) {
