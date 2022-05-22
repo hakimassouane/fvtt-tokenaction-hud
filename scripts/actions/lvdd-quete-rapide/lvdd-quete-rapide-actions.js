@@ -22,9 +22,11 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
     let baseSkills = this._getBaseSkills(actor, tokenId);
     let customSkills = this._getCustomSkills(actor, tokenId); */
 
+    console.log("attributes in do build action list is => ", attributes)
+
     this._combineCategoryWithList(
       result,
-      this.i18n("tokenactionhud.attributes"),
+      "Attributs",
       attributes
     );
    /*  this._combineCategoryWithList(
@@ -57,21 +59,24 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
 
   _getAttributeList(actor, tokenId) {
     let categoryId = "attributes";
-    let macroType = "attribute";
-    let result = this.initializeEmptyCategory(categoryId);
+    let type = "attribute";
+    let attributeCategory = this.initializeEmptyCategory(categoryId);
+    let attributeSubCategory = this.initializeEmptySubcategory();
 
-    for (let attribute in actor.data.data.attributes) {
+    for (let attributeName in actor.data.data.attributes) {
       console.log('Attribute in token hud')
-      let attributeCategory = this.initializeEmptySubcategory();
       
-      attributeCategory.actions.push({
-        name: attribute,
-        encodedValue: ["attributs", tokenId, attribute].join(this.delimiter),
+      attributeSubCategory.actions.push({
+        name: attributeName,
+        encodedValue: [type, tokenId, attribute].join(this.delimiter),
       });
-     
-     this._combineSubcategoryWithCategory(result, attribute, attributeCategory);
-     console.log("Attribute category is => ", attributeCategory)
+
+     console.log("Attribute category is => ", attributeSubCategory)
     }
+
+    this._combineSubcategoryWithCategory(attributeCategory, "Attributs", attributeSubCategory);
+
+    return attributeCategory
   }
 
   _getArchetypes(actor, tokenId) {
