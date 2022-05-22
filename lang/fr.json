@@ -497,6 +497,26 @@
       "attacks": "Attaques",
       "protections": "Protections",
       "capacities": "Capacités"
+    },
+    "lvddQueteRapide": {
+      "attributes": {
+        "categoryName": "Attributs",
+        "str": "Force",
+        "dex": "Dextérité",
+        "con": "Constitution",
+        "int": "Intelligence",
+        "wis": "Sagesse",
+        "cha": "Charisme"
+      },
+      "archetypes": {
+        "categoryName": "Archétypes",
+        "fig": "Guerrier",
+        "rog": "Escroc",
+        "exp": "Explorateur",
+        "sag": "Érudit",
+        "art": "Artiste",
+        "dip": "Diplomate"
+      }
     }
   }
 }

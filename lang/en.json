@@ -562,6 +562,26 @@
       "retreatparry": "Retreating Parry",
       "retreatparryfence": "Retreating Parry (Fencing)",
       "retreatblock": "Retreating Block"
+    },
+    "lvddQueteRapide": {
+      "attributes": {
+        "categoryName": "Attributes",
+        "str": "Strength",
+        "dex": "Dexterity",
+        "con": "Constitution",
+        "int": "Intelligence",
+        "wis": "Wisdom",
+        "cha": "Charisma"
+      },
+      "archetypes": {
+        "categoryName": "Archetypes",
+        "fig": "Fighter",
+        "rog": "Rogue",
+        "exp": "Explorer",
+        "sag": "Sage",
+        "art": "Artist",
+        "dip": "Diplomat"
+      }
     }
   }
 }

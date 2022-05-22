@@ -26,12 +26,12 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
 
     this._combineCategoryWithList(
       result,
-      "Attributs",
+      this.i18n("tokenactionhud.lvddQueteRapide.attributes.categoryName"),
       attributes
     );
     this._combineCategoryWithList(
       result,
-      "Archétypes",
+      this.i18n("tokenactionhud.lvddQueteRapide.archetypes.categoryName"),
       archetypes
     );
     /* this._combineCategoryWithList(
@@ -65,12 +65,12 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
 
     for (let attributeName in actor.data.data.attributes) {
       attributeSubCategory.actions.push({
-        name: attributeName,
+        name: this.i18n(`tokenactionhud.lvddQueteRapide.attributes[${attributeName}]`),
         encodedValue: [type, tokenId, attributeName].join(this.delimiter),
       });
     }
 
-    this._combineSubcategoryWithCategory(attributeCategory, "Attributs", attributeSubCategory);
+    this._combineSubcategoryWithCategory(attributeCategory, this.i18n(`tokenactionhud.lvddQueteRapide.attributes.categoryName`), attributeSubCategory);
 
     return attributeCategory
   }
@@ -83,12 +83,12 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
 
     for (let archetypeName in actor.data.data.archetypes) {
       archetypeSubCategory.actions.push({
-        name: archetypeName,
+        name: this.i18n(`tokenactionhud.lvddQueteRapide.archetypes[${archetypeName}]`),
         encodedValue: [type, tokenId, archetypeName].join(this.delimiter),
       });
     }
 
-    this._combineSubcategoryWithCategory(archetypeCategory, "Archétypes", archetypeSubCategory);
+    this._combineSubcategoryWithCategory(archetypeCategory, this.i18n(`tokenactionhud.lvddQueteRapide.archetypes.categoryName`), archetypeSubCategory);
 
     return archetypeCategory
   }
