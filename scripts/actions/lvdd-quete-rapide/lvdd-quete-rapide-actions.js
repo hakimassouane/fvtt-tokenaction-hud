@@ -165,7 +165,7 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
     let baseSkillSubCategory = this.initializeEmptySubcategory();
 
     actor.data.data.skills.items.forEach(skill => {
-      if (this.baseSkillsFr.includes(skill.name) || this.baseSkillsEn.includes(skill.name)) {
+      if ((this.baseSkillsFr.includes(skill.name) || this.baseSkillsEn.includes(skill.name)) && (item.data.data.canBeRolled && item.data.data.rollStats.length > 0)) {
         baseSkillSubCategory.actions.push({
           name: skill.name,
           img: skill.img,
@@ -186,7 +186,7 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
     let specificSkillSubCategory = this.initializeEmptySubcategory();
 
     actor.data.data.skills.items.forEach(skill => {
-      if (!this.baseSkillsFr.includes(skill.name) && !this.baseSkillsEn.includes(skill.name)) {
+      if ((!this.baseSkillsFr.includes(skill.name) && !this.baseSkillsEn.includes(skill.name)) && (item.data.data.canBeRolled && item.data.data.rollStats.length > 0)) {
         specificSkillSubCategory.actions.push({
           name: skill.name,
           img: skill.img,

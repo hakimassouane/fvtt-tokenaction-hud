@@ -31,9 +31,9 @@ export class RollHandlerBaseLvddQueteRapide extends RollHandler {
 
   async _handleMacros(event, macroType, actor, actionId) {
     console.log('event in handle macros is => ', event)
-    console.log('event in handle macros is => ', macroType)
-    console.log('event in handle macros is => ', actor)
-    console.log('event in handle macros is => ', actionId)
+    console.log('macroType in handle macros is => ', macroType)
+    console.log('actor in handle macros is => ', actor)
+    console.log('actionId in handle macros is => ', actionId)
     switch (macroType) {
       case 'attributs':
           this._rollAttribute(actor.id, actionId);
