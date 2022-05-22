@@ -18,8 +18,8 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
 
     let attributes = this._getAttributeList(actor, tokenId);
     let archetypes = this._getArchetypeList(actor, tokenId);
-    /*let inventory = this._getInventory(actor, tokenId);
-    let baseSkills = this._getBaseSkills(actor, tokenId);
+    let inventory = this._getInventory(actor, tokenId);
+    /*let baseSkills = this._getBaseSkills(actor, tokenId);
     let customSkills = this._getCustomSkills(actor, tokenId); */
 
     console.log("attributes in do build action list is => ", attributes)
@@ -34,12 +34,12 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
       this.i18n("tokenactionhud.lvddQueteRapide.archetypes.categoryName"),
       archetypes
     );
-    /* this._combineCategoryWithList(
+    this._combineCategoryWithList(
       result,
-      "Inventaire",
+      this.i18n("tokenactionhud.inventory"),
       inventory
     );
-    this._combineCategoryWithList(
+    /*this._combineCategoryWithList(
       result,
       "Compétences de base",
       baseSkills
@@ -94,27 +94,24 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
   }
 
   _getInventory(actor, tokenId) {
-    let result = this.initializeEmptyCategory("characteristics");
-    let macroType = "characteristic";
+    let categoryId = "inventory";
+    let type = "inventory";
+    let inventoryCategory = this.initializeEmptyCategory(categoryId);
+    let inventorySubCategory = this.initializeEmptySubcategory();
 
-    let characteristics = Object.entries(actor.characteristics);
-    let characteristicsCategory = this.initializeEmptySubcategory();
-    characteristicsCategory.actions = characteristics.map((c) => {
-      let encodedValue = [macroType, tokenId, c[0]].join(this.delimiter);
-      return {
-        name: this.i18n(c[1].abrev),
-        encodedValue: encodedValue,
-        id: c[0],
-      };
-    });
+    actor.data.data.resources.items.forEach(item => {
+      if (item.data.data.canBeRolled) {
+        inventorySubCategory.actions.push({
+          name: item.name,
+          img: item.img,
+          encodedValue: [type, tokenId, item.name].join(this.delimiter),
+        });
+      }
+    })
 
-    this._combineSubcategoryWithCategory(
-      result,
-      this.i18n("tokenactionhud.characteristics"),
-      characteristicsCategory
-    );
+    this._combineSubcategoryWithCategory(inventoryCategory, this.i18n(`tokenactionhud.inventory`), inventorySubCategory);
 
-    return result;
+    return inventoryCategory
   }
 
   _getBaseSkills(actor, tokenId) {
