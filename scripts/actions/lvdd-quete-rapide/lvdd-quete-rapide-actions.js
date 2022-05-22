@@ -17,8 +17,8 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
     result.actorId = actor.id;
 
     let attributes = this._getAttributeList(actor, tokenId);
-/*     let archetypes = this._getArchetypes(actor, tokenId);
-    let inventory = this._getInventory(actor, tokenId);
+    let archetypes = this._getArchetypeList(actor, tokenId);
+    /*let inventory = this._getInventory(actor, tokenId);
     let baseSkills = this._getBaseSkills(actor, tokenId);
     let customSkills = this._getCustomSkills(actor, tokenId); */
 
@@ -29,12 +29,12 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
       "Attributs",
       attributes
     );
-   /*  this._combineCategoryWithList(
+    this._combineCategoryWithList(
       result,
       "Archétypes",
       archetypes
     );
-    this._combineCategoryWithList(
+    /* this._combineCategoryWithList(
       result,
       "Inventaire",
       inventory
@@ -64,14 +64,10 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
     let attributeSubCategory = this.initializeEmptySubcategory();
 
     for (let attributeName in actor.data.data.attributes) {
-      console.log('Attribute in token hud')
-      
       attributeSubCategory.actions.push({
         name: attributeName,
         encodedValue: [type, tokenId, attributeName].join(this.delimiter),
       });
-
-     console.log("Attribute category is => ", attributeSubCategory)
     }
 
     this._combineSubcategoryWithCategory(attributeCategory, "Attributs", attributeSubCategory);
@@ -79,44 +75,22 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
     return attributeCategory
   }
 
-  _getArchetypes(actor, tokenId) {
-    let basicActions = this.initializeEmptySubcategory();
+  _getArchetypeList(actor, tokenId) {
+    let categoryId = "archetypes";
+    let type = "archetype";
+    let archetypeCategory = this.initializeEmptyCategory(categoryId);
+    let archetypeSubCategory = this.initializeEmptySubcategory();
 
-    let unarmed = ["unarmed", tokenId, "unarmed"].join(this.delimiter);
-    const unarmedAction = {
-      id: "unarmed",
-      name: this.i18n("tokenactionhud.unarmed"),
-      encodedValue: unarmed,
-    };
-    basicActions.actions.push(unarmedAction);
+    for (let archetypeName in actor.data.data.archetypes) {
+      archetypeSubCategory.actions.push({
+        name: archetypeName,
+        encodedValue: [type, tokenId, archetypeName].join(this.delimiter),
+      });
+    }
 
-    let stompValue = ["stomp", tokenId, "stomp"].join(this.delimiter);
-    const stompAction = {
-      id: "stomp",
-      name: this.i18n("tokenactionhud.stomp"),
-      encodedValue: stompValue,
-    };
-    basicActions.actions.push(stompAction);
+    this._combineSubcategoryWithCategory(archetypeCategory, "Archétypes", archetypeSubCategory);
 
-    let improvisedValue = ["improvise", tokenId, "improvise"].join(
-      this.delimiter
-    );
-    const improvisedAction = {
-      id: "improvise",
-      name: this.i18n("tokenactionhud.improvisedWeapon"),
-      encodedValue: improvisedValue,
-    };
-    basicActions.actions.push(improvisedAction);
-
-    let dodgeValue = ["dodge", tokenId, "dodge"].join(this.delimiter);
-    const dodgeAction = {
-      id: "dodge",
-      name: this.i18n("tokenactionhud.dodge"),
-      encodedValue: dodgeValue,
-    };
-    basicActions.actions.push(dodgeAction);
-
-    return basicActions;
+    return attributeCategory
   }
 
   _getInventory(actor, tokenId) {
