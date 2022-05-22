@@ -57,14 +57,14 @@ export class RollHandlerBaseLvddQueteRapide extends RollHandler {
   }
 
   _rollInventory(event, actionId) {
-    game.lvdd.handleTokenActionHudItems(event, actionId);
+    game.boilerplate.handleTokenActionHudItems(event, actionId);
   }
 
   _rollBaseSkill(event, actionId) {
-    game.lvdd.handleTokenActionHudItems(event, actionId);
+    game.boilerplate.handleTokenActionHudItems(event, actionId);
   }
 
   _rollSpecificSkill(event, actionId) {
-    game.lvdd.handleTokenActionHudItems(event, actionId);
+    game.boilerplate.handleTokenActionHudItems(event, actionId);
   }
 }
