@@ -31,10 +31,10 @@ export class RollHandlerBaseLvddQueteRapide extends RollHandler {
   async _handleMacros(event, macroType, actor, actionId) {
     switch (macroType) {
       case 'attribute':
-          this._rollAttribute(actor.id, actionId);
+          this._rollAttribute(actionId);
           break
       case 'archetype':
-        this._rollArchetype(actor.id, actionId);
+        this._rollArchetype(actionId);
         break
       case 'inventory':
           this._rollInventory(event, actionId);
@@ -48,12 +48,12 @@ export class RollHandlerBaseLvddQueteRapide extends RollHandler {
     }
   }
 
-  _rollAttribute(actorID, actionId) {
-    console.log('rolling attribute')
+  _rollAttribute(actionId) {
+    game.boilerplate.handleTokenActionHudStats(actionId);
   }
 
-  _rollArchetype(actorID, actionId) {
-    console.log('rolling archetype')
+  _rollArchetype(actionId) {
+    game.boilerplate.handleTokenActionHudStats(actionId);
   }
 
   _rollInventory(event, actionId) {
