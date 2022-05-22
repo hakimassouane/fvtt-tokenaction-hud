@@ -65,7 +65,7 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
 
     for (let attributeName in actor.data.data.attributes) {
       attributeSubCategory.actions.push({
-        name: this.i18n(`tokenactionhud.lvddQueteRapide.attributes[${attributeName}]`),
+        name: this.i18n(`tokenactionhud.lvddQueteRapide.attributes.${attributeName}`),
         encodedValue: [type, tokenId, attributeName].join(this.delimiter),
       });
     }
@@ -83,7 +83,7 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
 
     for (let archetypeName in actor.data.data.archetypes) {
       archetypeSubCategory.actions.push({
-        name: this.i18n(`tokenactionhud.lvddQueteRapide.archetypes[${archetypeName}]`),
+        name: this.i18n(`tokenactionhud.lvddQueteRapide.archetypes.${archetypeName}`),
         encodedValue: [type, tokenId, archetypeName].join(this.delimiter),
       });
     }
