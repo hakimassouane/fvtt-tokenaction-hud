@@ -52,7 +52,6 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
 
   async doBuildActionList(token, multipleTokens) {
     let result = this.initializeEmptyActionList();
-    console.log('Initialize dobuildactionlist tokenHUD')
     if (!token) return result;
     let tokenId = token.id;
     result.tokenId = tokenId;
@@ -65,8 +64,6 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
     let inventory = this._getInventory(actor, tokenId);
     let baseSkills = this._getBaseSkills(actor, tokenId);
     let specificSkills = this._getSpecificSkills(actor, tokenId);
-
-    console.log("attributes in do build action list is => ", attributes)
 
     this._combineCategoryWithList(
       result,

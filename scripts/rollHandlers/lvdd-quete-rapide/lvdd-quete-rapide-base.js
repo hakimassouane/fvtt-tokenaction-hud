@@ -1,5 +1,4 @@
 import { RollHandler } from "../rollHandler.js";
-import * as settings from "../../settings.js";
 
 export class RollHandlerBaseLvddQueteRapide extends RollHandler {
   constructor() {
@@ -30,10 +29,6 @@ export class RollHandlerBaseLvddQueteRapide extends RollHandler {
   }
 
   async _handleMacros(event, macroType, actor, actionId) {
-    console.log('event in handle macros is => ', event)
-    console.log('macroType in handle macros is => ', macroType)
-    console.log('actor in handle macros is => ', actor)
-    console.log('actionId in handle macros is => ', actionId)
     switch (macroType) {
       case 'attribute':
           this._rollAttribute(actor.id, actionId);
@@ -42,13 +37,13 @@ export class RollHandlerBaseLvddQueteRapide extends RollHandler {
         this._rollArchetype(actor.id, actionId);
         break
       case 'inventory':
-          this._rollInventory(event, actor.id, actionId);
+          this._rollInventory(event, actionId);
           break
       case 'baseSkill':
-          this._rollBaseSkill(event, actor.id, actionId);
+          this._rollBaseSkill(event, actionId);
           break
       case 'specificSkill':
-        this._rollSpecificSkill(event, actor.id, actionId);
+        this._rollSpecificSkill(event, actionId);
         break
     }
   }
@@ -61,18 +56,15 @@ export class RollHandlerBaseLvddQueteRapide extends RollHandler {
     console.log('rolling archetype')
   }
 
-  _rollInventory(event, actorID, actionId) {
-    console.log('rolling inventory')
-    game.boilerplate.rollItemMacro(actionId, {});
+  _rollInventory(event, actionId) {
+    game.lvdd.handleTokenActionHudItems(event, actionId);
   }
 
-  _rollBaseSkill(event, actorID, actionId) {
-    console.log('rolling base skill')
-    game.boilerplate.rollItemMacro(actionId, {});
+  _rollBaseSkill(event, actionId) {
+    game.lvdd.handleTokenActionHudItems(event, actionId);
   }
 
-  _rollSpecificSkill(event, actorID, actionId) {
-    console.log('rolling specific skill')
-    game.boilerplate.rollItemMacro(actionId, {});
+  _rollSpecificSkill(event, actionId) {
+    game.lvdd.handleTokenActionHudItems(event, actionId);
   }
 }
