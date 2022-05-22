@@ -68,7 +68,7 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
       
       attributeSubCategory.actions.push({
         name: attributeName,
-        encodedValue: [type, tokenId, attribute].join(this.delimiter),
+        encodedValue: [type, tokenId, attributeName].join(this.delimiter),
       });
 
      console.log("Attribute category is => ", attributeSubCategory)
