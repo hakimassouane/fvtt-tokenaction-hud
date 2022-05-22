@@ -35,13 +35,44 @@ export class RollHandlerBaseLvddQueteRapide extends RollHandler {
     console.log('actor in handle macros is => ', actor)
     console.log('actionId in handle macros is => ', actionId)
     switch (macroType) {
-      case 'attributs':
+      case 'attribute':
           this._rollAttribute(actor.id, actionId);
           break
+      case 'archetype':
+        this._rollArchetype(actor.id, actionId);
+        break
+      case 'inventory':
+          this._rollInventory(event, actor.id, actionId);
+          break
+      case 'baseSkill':
+          this._rollBaseSkill(event, actor.id, actionId);
+          break
+      case 'specificSkill':
+        this._rollSpecificSkill(event, actor.id, actionId);
+        break
     }
   }
 
   _rollAttribute(actorID, actionId) {
     console.log('rolling attribute')
+  }
+
+  _rollArchetype(actorID, actionId) {
+    console.log('rolling archetype')
+  }
+
+  _rollInventory(event, actorID, actionId) {
+    console.log('rolling inventory')
+    game.boilerplate.rollItemMacro(actionId, {});
+  }
+
+  _rollBaseSkill(event, actorID, actionId) {
+    console.log('rolling base skill')
+    game.boilerplate.rollItemMacro(actionId, {});
+  }
+
+  _rollSpecificSkill(event, actorID, actionId) {
+    console.log('rolling specific skill')
+    game.boilerplate.rollItemMacro(actionId, {});
   }
 }
