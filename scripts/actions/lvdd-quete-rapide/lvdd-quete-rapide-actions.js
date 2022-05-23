@@ -22,9 +22,9 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
       "Performance",
       "Perspicacité",
       "Persuasion",
-      "Resistance",
+      "Résistance",
       "Séduction",
-      "Voler"
+      "Vol"
     ]
     this.baseSkillsEn = [
       "Acrobatics",
