@@ -46,7 +46,7 @@ export class RollHandlerBaseLvddQueteRapide extends RollHandler {
         this._rollSpecificSkill(event, actionId);
         break
       case 'utility':
-        this._performUtilityMacro(actor, actionId);
+        await this._performUtilityMacro(actor, actionId);
         break
     }
   }
@@ -71,7 +71,7 @@ export class RollHandlerBaseLvddQueteRapide extends RollHandler {
     game.boilerplate.handleTokenActionHudItems(event, actionId);
   }
 
-  _performUtilityMacro(actor, actionId) {
+  async _performUtilityMacro(actor, actionId) {
     switch (actionId) {
       case "inspiration":
         if (actor.data.data.inspiration < 3) {
