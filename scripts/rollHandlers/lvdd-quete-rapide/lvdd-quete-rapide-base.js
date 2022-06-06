@@ -31,19 +31,22 @@ export class RollHandlerBaseLvddQueteRapide extends RollHandler {
   async _handleMacros(event, macroType, actor, actionId) {
     switch (macroType) {
       case 'attribute':
-          this._rollAttribute(actor, actionId);
-          break
+        this._rollAttribute(actor, actionId);
+        break
       case 'archetype':
         this._rollArchetype(actor, actionId);
         break
       case 'inventory':
-          this._rollInventory(event, actionId);
-          break
+        this._rollInventory(event, actionId);
+        break
       case 'baseSkill':
-          this._rollBaseSkill(event, actionId);
-          break
+        this._rollBaseSkill(event, actionId);
+        break
       case 'specificSkill':
         this._rollSpecificSkill(event, actionId);
+        break
+      case 'utility':
+        this._performUtilityMacro(actor, actionId);
         break
     }
   }
@@ -66,5 +69,25 @@ export class RollHandlerBaseLvddQueteRapide extends RollHandler {
 
   _rollSpecificSkill(event, actionId) {
     game.boilerplate.handleTokenActionHudItems(event, actionId);
+  }
+
+  _performUtilityMacro(actor, actionId) {
+    switch (actionId) {
+      case "inspiration":
+        if (actor.data.data.inspiration < 3) {
+          actor.update({ "data.inspiration": actor.data.data.inspiration + 1 });
+        } else {
+          return ui.notifications.warn("Vous ne pouvez pas avoir plus de 3 points d'inspiration");
+        }
+        break;
+      case "initiative":
+        await this.performInitiativeMacro(actor);
+        break;
+    }
+  }
+
+  async performInitiativeMacro(actor) {
+    await actor.rollInitiative({ createCombatants: true });
+    Hooks.callAll("forceUpdateTokenActionHUD");
   }
 }

@@ -64,6 +64,7 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
     let inventory = this._getInventory(actor, tokenId);
     let baseSkills = this._getBaseSkills(actor, tokenId);
     let specificSkills = this._getSpecificSkills(actor, tokenId);
+    let utility = this._buildUtilityCategory(actor, tokenId)
 
     this._combineCategoryWithList(
       result,
@@ -89,6 +90,11 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
       result,
       this.i18n("tokenactionhud.lvddQueteRapide.specificSkills"),
       specificSkills
+    );
+    this._combineCategoryWithList(
+      result,
+      this.i18n("tokenactionhud.utility"),
+      utility
     );
 
     this._setFilterSuggestions(actor);
@@ -206,4 +212,28 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
       this.filterManager.setSuggestions(id, suggestions);
   }
 
+  _buildUtilityCategory(actor, tokenId) {
+    let categoryId = "utilities";
+    let type = "utility";
+    let utilityCategory = this.initializeEmptyCategory(categoryId);
+    let utilitySubCategory = this.initializeEmptySubcategory();
+
+    if (actor.data.type === "character") {
+      utilitySubCategory.actions.push({
+        id: "inspiration",
+        name: this.i18n("tokenactionhud.inspiration"),
+        encodedValue: [type, tokenId, "inspiration"].join(this.delimiter),
+      });
+
+      utilitySubCategory.actions.push({
+        id: "initiative",
+        name: this.i18n("tokenactionhud.initiative"),
+        encodedValue: [type, tokenId, "initiative"].join(this.delimiter),
+      });
+    }
+
+    this._combineSubcategoryWithCategory(utilityCategory, this.i18n("tokenactionhud.utility"), utilitySubCategory);
+
+    return utilityCategory
+  }
 }
