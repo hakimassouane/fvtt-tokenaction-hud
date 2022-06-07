@@ -67,13 +67,13 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
 
     this._combineCategoryWithList(
       actionList,
-      this.i18n("tokenactionhud.lvddQueteRapide.archetypes.categoryName"),
-      archetypes
+      this.i18n("tokenactionhud.lvddQueteRapide.attributes.categoryName"),
+      attributes
     );
     this._combineCategoryWithList(
       actionList,
-      this.i18n("tokenactionhud.lvddQueteRapide.attributes.categoryName"),
-      attributes
+      this.i18n("tokenactionhud.lvddQueteRapide.archetypes.categoryName"),
+      archetypes
     );
     this._combineCategoryWithList(
       actionList,

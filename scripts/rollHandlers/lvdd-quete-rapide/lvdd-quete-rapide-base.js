@@ -77,8 +77,9 @@ export class RollHandlerBaseLvddQueteRapide extends RollHandler {
         if (actor.data.data.inspiration < 3) {
           actor.update({ "data.inspiration": actor.data.data.inspiration + 1 });
         } else {
-          return ui.notifications.warn("Vous ne pouvez pas avoir plus de 3 points d'inspiration");
+          return ui.notifications.error("Vous ne pouvez pas avoir plus de 3 points d'inspiration");
         }
+        return ui.notifications.info("Un point d'inspiration a été rajouté");
         break;
       case "initiative":
         await this.performInitiativeMacro(actor);
