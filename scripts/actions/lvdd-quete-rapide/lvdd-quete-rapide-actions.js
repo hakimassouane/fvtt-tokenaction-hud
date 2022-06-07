@@ -91,11 +91,6 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
       this.i18n("tokenactionhud.lvddQueteRapide.specificSkills"),
       specificSkills
     );
-    this._combineCategoryWithList(
-      actionList,
-      this.i18n("tokenactionhud.utility"),
-      utility
-    );
 
     this._setFilterSuggestions(actor);
 
