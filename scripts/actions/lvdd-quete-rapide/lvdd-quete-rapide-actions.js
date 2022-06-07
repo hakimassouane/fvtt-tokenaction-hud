@@ -51,57 +51,57 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
   }
 
   async doBuildActionList(token, multipleTokens) {
-    let result = this.initializeEmptyActionList();
-    if (!token) return result;
+    let actionList = this.initializeEmptyActionList();
+    if (!token) return actionList;
     let tokenId = token.id;
-    result.tokenId = tokenId;
+    actionList.tokenId = tokenId;
     let actor = token.actor;
-    if (!actor) return result;
-    result.actorId = actor.id;
+    if (!actor) return actionList;
+    actionList.actorId = actor.id;
 
     let attributes = this._getAttributeList(actor, tokenId);
     let archetypes = this._getArchetypeList(actor, tokenId);
     let inventory = this._getInventory(actor, tokenId);
     let baseSkills = this._getBaseSkills(actor, tokenId);
     let specificSkills = this._getSpecificSkills(actor, tokenId);
-    let utility = this._buildUtilityCategory(actor, tokenId)
+    let utility = this._buildUtilityCategory(actionList, actor, tokenId)
 
     this._combineCategoryWithList(
-      result,
+      actionList,
       this.i18n("tokenactionhud.lvddQueteRapide.attributes.categoryName"),
       attributes
     );
     this._combineCategoryWithList(
-      result,
+      actionList,
       this.i18n("tokenactionhud.lvddQueteRapide.archetypes.categoryName"),
       archetypes
     );
     this._combineCategoryWithList(
-      result,
+      actionList,
       this.i18n("tokenactionhud.inventory"),
       inventory
     );
     this._combineCategoryWithList(
-      result,
+      actionList,
       this.i18n("tokenactionhud.lvddQueteRapide.baseSkills"),
       baseSkills
     );
     this._combineCategoryWithList(
-      result,
+      actionList,
       this.i18n("tokenactionhud.lvddQueteRapide.specificSkills"),
       specificSkills
     );
     this._combineCategoryWithList(
-      result,
+      actionList,
       this.i18n("tokenactionhud.utility"),
       utility
     );
 
     this._setFilterSuggestions(actor);
 
-    if (settings.get("showHudTitle")) result.hudTitle = token.data?.name;
+    if (settings.get("showHudTitle")) actionList.hudTitle = token.data?.name;
 
-    return result;
+    return actionList;
   }
 
   _getAttributeList(actor, tokenId) {
@@ -212,11 +212,16 @@ export class ActionHandlerLvddQueteRapide extends ActionHandler {
       this.filterManager.setSuggestions(id, suggestions);
   }
 
-  _buildUtilityCategory(actor, tokenId) {
-    let categoryId = "utilities";
+  _buildUtilityCategory(actionList, actor, tokenId) {
     let type = "utility";
-    let utilityCategory = this.initializeEmptyCategory(categoryId);
     let utilitySubCategory = this.initializeEmptySubcategory();
+    let utilityCategory = actionList.categories.find((c) => c.id === "utility");
+
+    if (!utilityCategory) {
+      utilityCategory = this.initializeEmptyCategory("utility");
+      utilityCategory.name = this.i18n("tokenactionhud.utility");
+      actionList.categories.push(utilityCategory);
+    }
 
     if (actor.data.type === "character") {
       utilitySubCategory.actions.push({
